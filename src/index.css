@@ -191,13 +191,14 @@ main {
   position: relative;
   display: grid;
   grid-template-areas:
-    'sidebar author-name   author-handle relative-date'
-    'sidebar content       content       content'
-    'sidebar profile-error profile-error profile-error'
-    'sidebar image         image           image'
-    'sidebar images        images          images'
-    'sidebar post-embed    post-embed      post-embed'
-    'sidebar embed         embed           embed';
+    'sidebar author-name      author-handle    relative-date'
+    'sidebar content          content          content'
+    'sidebar profile-error    profile-error    profile-error'
+    'sidebar post-embed-error post-embed-error post-embed-error'
+    'sidebar image            image            image'
+    'sidebar images           images           images'
+    'sidebar post-embed       post-embed       post-embed'
+    'sidebar embed            embed            embed';
   grid-template-columns: min-content minmax(0, max-content) 1fr min-content;
   padding: 12px 0;
 }
@@ -271,6 +272,11 @@ main {
   margin-top: 8px;
 }
 
+.Post__post-embed-error {
+  grid-area: post-embed-error;
+  margin-top: 8px;
+}
+
 .Post__image {
   grid-area: image;
   margin-top: 8px;
@@ -325,13 +331,14 @@ main {
 
 .Post--embed {
   grid-template-areas:
-    'sidebar author-name   author-handle relative-date'
-    'content content       content       content'
-    'profile-error profile-error profile-error profile-error'
-    'image image         image           image'
-    'images images        images          images'
-    'post-embed post-embed    post-embed      post-embed'
-    'embed embed         embed           embed';
+    'sidebar          author-name      author-handle    relative-date'
+    'content          content          content          content'
+    'profile-error    profile-error    profile-error    profile-error'
+    'post-embed-error post-embed-error post-embed-error post-embed-error'
+    'image            image            image            image'
+    'images           images           images           images'
+    'post-embed       post-embed       post-embed       post-embed'
+    'embed            embed            embed            embed';
   grid-template-columns: min-content minmax(0, max-content) 1fr min-content;
   padding: 8px 12px;
   border: 1px solid #ddddde;

@@ -233,7 +233,17 @@ function getRelativeDate(date: Date) {
   return relativeDate
 }
 
-function Post({ uri, post }: { uri: string; post: AppBskyFeedPost.Record }) {
+function Post({
+  className,
+  uri,
+  post,
+  isEmbedded = false,
+}: {
+  className?: string
+  uri: string
+  post: AppBskyFeedPost.Record
+  isEmbedded?: boolean
+}) {
   const atUri = useMemo(() => new AtUri(uri), [uri])
 
   const [profile, setProfile] = useState<{
@@ -243,6 +253,14 @@ function Post({ uri, post }: { uri: string; post: AppBskyFeedPost.Record }) {
   } | null>(null)
 
   const [profileError, setProfileError] = useState<string | null>(null)
+
+  const [embeddedPost, setEmbeddedPost] = useState<{
+    uri: string
+    record: AppBskyFeedPost.Record
+  } | null>(null)
+  const [embeddedPostError, setEmbeddedPostError] = useState<string | null>(
+    null
+  )
 
   const [parentPost, setParentPost] = useState<AppBskyFeedPost.Record | null>(
     null
@@ -267,7 +285,7 @@ function Post({ uri, post }: { uri: string; post: AppBskyFeedPost.Record }) {
   }, [post.createdAt])
 
   useEffect(() => {
-    if (!post.reply) {
+    if (isEmbedded || !post.reply) {
       return () => {}
     }
 
@@ -288,7 +306,7 @@ function Post({ uri, post }: { uri: string; post: AppBskyFeedPost.Record }) {
     return () => {
       abortController.abort()
     }
-  }, [post.reply?.parent.uri, post.reply?.parent.cid])
+  }, [isEmbedded, post.reply?.parent.uri, post.reply?.parent.cid])
 
   useEffect(() => {
     const abortController = new AbortController()
@@ -321,8 +339,46 @@ function Post({ uri, post }: { uri: string; post: AppBskyFeedPost.Record }) {
     }
   }, [atUri.hostname])
 
+  useEffect(() => {
+    if (isEmbedded) {
+      return
+    }
+
+    if (
+      !AppBskyEmbedRecord.isMain(post.embed) &&
+      !AppBskyEmbedRecordWithMedia.isMain(post.embed)
+    ) {
+      return
+    }
+    const record = AppBskyEmbedRecord.isMain(post.embed)
+      ? post.embed.record
+      : post.embed.record.record
+
+    const abortController = new AbortController()
+
+    fetchPost(record.uri, record.cid)
+      .then((data) => {
+        if (abortController.signal.aborted) {
+          return
+        }
+
+        setEmbeddedPost({ uri: record.uri, record: data })
+      })
+      .catch((error) => {
+        setEmbeddedPostError(error.message)
+      })
+
+    return () => {
+      abortController.abort()
+    }
+  }, [
+    isEmbedded,
+    post.embed && AppBskyEmbedRecord.isMain(post.embed),
+    post.embed && AppBskyEmbedRecordWithMedia.isMain(post.embed),
+  ])
+
   const postNode = (
-    <article className="Post">
+    <article className={cn('Post', isEmbedded && 'Post--embed', className)}>
       {profileImage ? (
         <img className="Post__avatar" src={profileImage} />
       ) : (
@@ -354,7 +410,7 @@ function Post({ uri, post }: { uri: string; post: AppBskyFeedPost.Record }) {
       <div className="Post__content">
         <RichTextRenderer text={post.text} facets={post.facets} />
       </div>
-      {post.embed ? (
+      {!isEmbedded && post.embed ? (
         AppBskyEmbedImages.isMain(post.embed) ? (
           <PostImages did={atUri.hostname} images={post.embed.images} />
         ) : AppBskyEmbedRecordWithMedia.isMain(post.embed) ? (
@@ -365,12 +421,16 @@ function Post({ uri, post }: { uri: string; post: AppBskyFeedPost.Record }) {
                 images={post.embed.media.images}
               />
             ) : null}
-            <PostEmbed
-              className="Post__post-embed"
-              record={post.embed.record}
-            />
           </>
         ) : null
+      ) : null}
+      {embeddedPost ? (
+        <Post
+          className="Post__post-embed"
+          uri={embeddedPost.uri}
+          post={embeddedPost.record}
+          isEmbedded
+        />
       ) : null}
       {profileError ? (
         <FriendlyError
@@ -379,6 +439,21 @@ function Post({ uri, post }: { uri: string; post: AppBskyFeedPost.Record }) {
           message={profileError}
         />
       ) : null}
+      {embeddedPostError ? (
+        <FriendlyError
+          className="Post__post-embed-error"
+          heading="Error fetching the quoted post"
+          message={embeddedPostError}
+        />
+      ) : null}
+      {isEmbedded && (
+        <a
+          className="Post__link"
+          href={`https://staging.bsky.app/profile/${atUri.hostname}/post/${atUri.rkey}`}
+        >
+          Open post in the Bluesky web app
+        </a>
+      )}
     </article>
   )
 
@@ -410,143 +485,6 @@ function Post({ uri, post }: { uri: string; post: AppBskyFeedPost.Record }) {
   }
 
   return postNode
-}
-
-function PostEmbed({
-  className,
-  record: { record },
-}: {
-  className?: string
-  record: AppBskyEmbedRecord.Main
-}) {
-  const atUri = useMemo(() => new AtUri(record.uri), [record.uri])
-
-  const [post, setPost] = useState<AppBskyFeedPost.Record | null>(null)
-  const [postError, setPostError] = useState<string | null>(null)
-
-  const [profile, setProfile] = useState<{
-    uri: string
-    handle: string
-    profile: AppBskyActorProfile.Record
-  } | null>(null)
-  const [profileError, setProfileError] = useState<string | null>(null)
-
-  const profileImage = useMemo(() => {
-    if (!profile) {
-      return null
-    }
-
-    if (!profile.profile.avatar) {
-      return null
-    }
-
-    return getBlobURL(atUri.hostname, profile.profile.avatar)
-  }, [profile])
-
-  const [date, relativeDate] = useMemo(() => {
-    if (!post) {
-      return [new Date(), '']
-    }
-    const date = new Date(post.createdAt)
-    return [date, getRelativeDate(date)]
-  }, [post?.createdAt])
-
-  useEffect(() => {
-    const abortController = new AbortController()
-
-    fetchPost(record.uri, record.cid)
-      .then((post) => {
-        if (abortController.signal.aborted) {
-          return
-        }
-        setPost(post)
-      })
-      .catch((error) => {
-        setPostError(error.message)
-      })
-
-    return () => {
-      abortController.abort()
-    }
-  }, [record.uri])
-
-  useEffect(() => {
-    const abortController = new AbortController()
-
-    fetchProfile(atUri.hostname)
-      .then((result) => {
-        if (abortController.signal.aborted) {
-          return
-        }
-
-        setProfile(result)
-      })
-      .catch((error) => {
-        setProfileError(error.message)
-      })
-
-    return () => {
-      abortController.abort()
-    }
-  }, [atUri.hostname])
-
-  if (postError) {
-    return (
-      <FriendlyError
-        className={className}
-        heading="Failed to fetch the embedded post"
-        message={postError}
-      />
-    )
-  }
-
-  if (!post) {
-    return null
-  }
-
-  return (
-    <div className={cn('Post', 'Post--embed', className)}>
-      {profileImage ? (
-        <img className="Post__avatar" src={profileImage} />
-      ) : (
-        <div className="Post__avatar-placeholder" />
-      )}
-      <a
-        className="Post__author-name"
-        href={`https://staging.bsky.app/profile/${
-          profile ? profile.handle : atUri.hostname
-        }`}
-      >
-        {profile?.profile.displayName ?? atUri.hostname}
-      </a>{' '}
-      {profile ? (
-        <span className="Post__author-handle">@{profile.handle}</span>
-      ) : null}
-      <time
-        className="Post__relative-date"
-        dateTime={date.toISOString()}
-        title={date.toLocaleString()}
-      >
-        {relativeDate}
-      </time>
-      <div className="Post__content">
-        <RichTextRenderer text={post.text} facets={post.facets} />
-      </div>
-      {profileError ? (
-        <FriendlyError
-          className="Post__profile-error"
-          heading="Error fetching author's profile"
-          message={profileError}
-        />
-      ) : null}
-      <a
-        className="Post__link"
-        href={`https://staging.bsky.app/profile/${atUri.hostname}/post/${atUri.rkey}`}
-      >
-        Open post in the Bluesky web app
-      </a>
-    </div>
-  )
 }
 
 function PostImages({
@@ -623,6 +561,7 @@ function App() {
         // The cursor will change and the effect will run again
       }
     }
+    onScroll()
 
     window.addEventListener('scroll', onScroll, { passive: true })
 
