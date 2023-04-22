@@ -103,10 +103,7 @@ async function fetchProfile(repo: string) {
           rkey: 'self',
         })
         .then(({ data: { uri, value } }) => {
-          if (
-            AppBskyActorProfile.isRecord(value) &&
-            AppBskyActorProfile.validateRecord(value).success
-          ) {
+          if (AppBskyActorProfile.isRecord(value)) {
             return { uri, value }
           }
           throw new Error(`Invalid profile record ${uri}`)
