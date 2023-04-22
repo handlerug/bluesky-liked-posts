@@ -1,0 +1,135 @@
+.AppHeading {
+  color: #224;
+  letter-spacing: -0.01em;
+  font-size: 2.5rem;
+  margin-bottom: 0;
+}
+
+.AppSubtitle {
+  margin-top: 0;
+  color: #335;
+}
+
+.LikeFetchError {
+  margin-top: 16px;
+}
+
+.SpinnerCard {
+  position: relative;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: ease 0.2s height, ease 0.2s opacity;
+}
+
+.SpinnerCard--visible {
+  opacity: 1;
+  height: calc(5rem + 16px);
+  pointer-events: auto;
+}
+
+.SpinnerCard__inner {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: white;
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: 8px;
+  outline: 1px solid #c0c0e3;
+  text-align: center;
+}
+
+.SpinnerCard .Spinner {
+  --size: 40px;
+  --thickness: 5px;
+}
+
+.Spinner {
+  --size: 20px;
+  --thickness: 3px;
+  position: relative;
+  display: inline-block;
+  width: var(--size);
+  height: var(--size);
+}
+
+.Spinner::before {
+  display: block;
+  position: absolute;
+  content: '';
+  top: 0;
+  left: 0;
+  width: var(--size);
+  height: var(--size);
+  border: var(--thickness) solid #c0c0e3;
+  border-radius: 100%;
+}
+
+.Spinner::after {
+  display: block;
+  position: absolute;
+  content: '';
+  top: 0;
+  left: 0;
+  width: var(--size);
+  height: var(--size);
+  border: var(--thickness) solid #44d;
+  border-radius: 100%;
+  clip-path: inset(0 50% 50% 0);
+  animation: spinner-spin 1s linear infinite;
+}
+
+@keyframes spinner-spin {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.PostTimeline {
+  background: white;
+  margin: 1rem 0;
+  padding: 0 16px;
+  border-radius: 8px;
+  outline: 1px solid #c0c0e3;
+  transition: ease 0.2s opacity;
+}
+
+.PostTimeline--loading {
+  opacity: 0.5;
+}
+
+.PostSpinner {
+  text-align: center;
+  padding: 16px 0;
+}
+
+.PostSpinner .Spinner {
+  --size: 40px;
+  --thickness: 5px;
+}
+
+.PostThread > .Post > .Post__avatar {
+  z-index: 2;
+}
+
+.PostThread > .Post:not(:last-child)::before {
+  position: absolute;
+  display: block;
+  content: '';
+  top: 16px;
+  left: 21px;
+  width: 2px;
+  height: 100%;
+  background: #ccd;
+  z-index: 1;
+}
