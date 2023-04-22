@@ -1,9 +1,10 @@
-import { FormEvent, useEffect, useState } from 'react'
 import classNames from 'classnames'
-import Post from './components/Post'
-import FriendlyError from './components/FriendlyError'
-import { Like, fetchLikedPosts } from './utils/api'
+import { FormEvent, useEffect, useState } from 'react'
 import './App.css'
+import FriendlyError from './components/FriendlyError'
+import Post from './components/Post'
+import { Like, fetchLikedPosts } from './utils/api'
+import Spinner from './components/Spinner'
 
 function App() {
   const [isLoading, setIsLoading] = useState(false)
@@ -64,9 +65,9 @@ function App() {
 
   return (
     <main>
-      <h1 className="AppHeading">Show my likes! ❤️</h1>
+      <h1 className="App__heading">Show my likes! ❤️</h1>
 
-      <p className="AppSubtitle">
+      <p className="App__subtitle">
         Enter your profile handle and get a list of posts you have liked
       </p>
 
@@ -86,28 +87,28 @@ function App() {
 
       <div
         className={classNames(
-          'SpinnerCard',
-          isLoading && 'SpinnerCard--visible'
+          'App__loading-card',
+          isLoading && 'App__loading-card--visible'
         )}
         aria-hidden={!isLoading}
       >
-        <div className="SpinnerCard__inner">
-          <i className="Spinner"></i>
+        <div className="App__loading-card__inner">
+          <Spinner />
           Loading your likes…
         </div>
       </div>
 
       {error ? (
         <FriendlyError
-          className="LikeFetchError"
+          className="App__like-error"
           heading="Error fetching likes"
           message={error}
         />
       ) : likes.length > 0 ? (
         <div
           className={classNames(
-            'PostTimeline',
-            isLoading && 'PostTimeline--loading'
+            'App__post-timeline',
+            isLoading && 'App__post-timeline--loading'
           )}
         >
           {likes.map((like) =>
@@ -122,8 +123,11 @@ function App() {
             )
           )}
           {cursor ? (
-            <div className="PostSpinner" aria-label="Loading more posts">
-              <i className="Spinner"></i>
+            <div
+              className="App__post-loading-card"
+              aria-label="Loading more posts"
+            >
+              <Spinner />
             </div>
           ) : null}
         </div>

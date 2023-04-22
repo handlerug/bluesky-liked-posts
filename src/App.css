@@ -1,20 +1,16 @@
-.AppHeading {
+.App__heading {
   color: #224;
   letter-spacing: -0.01em;
   font-size: 2.5rem;
   margin-bottom: 0;
 }
 
-.AppSubtitle {
+.App__subtitle {
   margin-top: 0;
-  color: #335;
+  font-size: 1.25em;
 }
 
-.LikeFetchError {
-  margin-top: 16px;
-}
-
-.SpinnerCard {
+.App__loading-card {
   position: relative;
   height: 0;
   opacity: 0;
@@ -22,13 +18,13 @@
   transition: ease 0.2s height, ease 0.2s opacity;
 }
 
-.SpinnerCard--visible {
+.App__loading-card--visible {
   opacity: 1;
   height: calc(5rem + 16px);
   pointer-events: auto;
 }
 
-.SpinnerCard__inner {
+.App__loading-card__inner {
   position: absolute;
   left: 0;
   bottom: 0;
@@ -46,56 +42,16 @@
   text-align: center;
 }
 
-.SpinnerCard .Spinner {
+.App__loading-card .Spinner {
   --size: 40px;
   --thickness: 5px;
 }
 
-.Spinner {
-  --size: 20px;
-  --thickness: 3px;
-  position: relative;
-  display: inline-block;
-  width: var(--size);
-  height: var(--size);
+.App__like-error {
+  margin-top: 16px;
 }
 
-.Spinner::before {
-  display: block;
-  position: absolute;
-  content: '';
-  top: 0;
-  left: 0;
-  width: var(--size);
-  height: var(--size);
-  border: var(--thickness) solid #c0c0e3;
-  border-radius: 100%;
-}
-
-.Spinner::after {
-  display: block;
-  position: absolute;
-  content: '';
-  top: 0;
-  left: 0;
-  width: var(--size);
-  height: var(--size);
-  border: var(--thickness) solid #44d;
-  border-radius: 100%;
-  clip-path: inset(0 50% 50% 0);
-  animation: spinner-spin 1s linear infinite;
-}
-
-@keyframes spinner-spin {
-  from {
-    transform: rotate(0);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.PostTimeline {
+.App__post-timeline {
   background: white;
   margin: 1rem 0;
   padding: 0 16px;
@@ -104,32 +60,16 @@
   transition: ease 0.2s opacity;
 }
 
-.PostTimeline--loading {
+.App__post-timeline--loading {
   opacity: 0.5;
 }
 
-.PostSpinner {
+.App__post-loading-card {
   text-align: center;
   padding: 16px 0;
 }
 
-.PostSpinner .Spinner {
+.App__post-loading-card .Spinner {
   --size: 40px;
   --thickness: 5px;
-}
-
-.PostThread > .Post > .Post__avatar {
-  z-index: 2;
-}
-
-.PostThread > .Post:not(:last-child)::before {
-  position: absolute;
-  display: block;
-  content: '';
-  top: 16px;
-  left: 21px;
-  width: 2px;
-  height: 100%;
-  background: #ccd;
-  z-index: 1;
 }

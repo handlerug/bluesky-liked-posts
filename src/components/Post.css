@@ -167,3 +167,19 @@
   height: 24px;
   margin-right: 8px;
 }
+
+.PostThread > .Post > .Post__avatar {
+  z-index: 2;
+}
+
+.PostThread > .Post:not(:last-child)::before {
+  position: absolute;
+  display: block;
+  content: '';
+  top: 16px;
+  left: 21px;
+  width: 2px;
+  height: 100%;
+  background: #ccd;
+  z-index: 1;
+}

@@ -1,0 +1,43 @@
+.Spinner {
+  --size: 20px;
+  --thickness: 3px;
+  position: relative;
+  display: inline-block;
+  width: var(--size);
+  height: var(--size);
+}
+
+.Spinner::before {
+  display: block;
+  position: absolute;
+  content: '';
+  top: 0;
+  left: 0;
+  width: var(--size);
+  height: var(--size);
+  border: var(--thickness) solid #c0c0e3;
+  border-radius: 100%;
+}
+
+.Spinner::after {
+  display: block;
+  position: absolute;
+  content: '';
+  top: 0;
+  left: 0;
+  width: var(--size);
+  height: var(--size);
+  border: var(--thickness) solid #44d;
+  border-radius: 100%;
+  clip-path: inset(0 50% 50% 0);
+  animation: spinner-spin 1s linear infinite;
+}
+
+@keyframes spinner-spin {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
