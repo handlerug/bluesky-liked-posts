@@ -1,3 +1,3 @@
-# View your liked posts on Bluesky
+# Show my likes! ❤️
 
-A web app that shows profile's liked posts.
+A web app that shows liked posts of a profile.
