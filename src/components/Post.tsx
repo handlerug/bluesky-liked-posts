@@ -207,7 +207,7 @@ function Post({
       <div className="Post__content">
         <RichText text={post.text} facets={post.facets} />
       </div>
-      {!isEmbedded && post.embed ? (
+      {post.embed ? (
         AppBskyEmbedImages.isMain(post.embed) ? (
           <PostImages did={atUri.hostname} images={post.embed.images} />
         ) : AppBskyEmbedRecordWithMedia.isMain(post.embed) ? (
