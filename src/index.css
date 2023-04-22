@@ -1,0 +1,69 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  line-height: 1.4;
+  margin: 0;
+  padding: 0;
+}
+
+main {
+  max-width: 35rem;
+  margin: 0 auto;
+}
+
+.PostTimeline > * + * {
+  border-top: 1px solid #cee;
+}
+
+.Post {
+  padding: 12px 8px 12px 54px;
+}
+
+.Post > * + * {
+  margin-top: 4px;
+}
+
+.Post__avatar,
+.Post__avatar-placeholder {
+  float: left;
+  margin-left: -54px;
+  width: 44px;
+  height: 44px;
+  border-radius: 100%;
+}
+
+.Post__avatar-placeholder {
+  background: #dddde8;
+}
+
+.Post__profile {
+  margin: 0;
+  font-size: inherit;
+  font-weight: normal;
+}
+
+.Post__profile__handle {
+  opacity: 0.5;
+  font-size: 15px;
+}
+
+.FriendlyError {
+  background: #f0dddd;
+  padding: 8px 12px;
+  border: 1px solid #d99;
+  border-radius: 8px;
+}
+
+.Post__content a {
+  color: #44d;
+  text-decoration: none;
+}
+
+.Post__content a:hover {
+  text-decoration: underline;
+}
