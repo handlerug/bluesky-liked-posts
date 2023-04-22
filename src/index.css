@@ -5,58 +5,256 @@
 }
 
 body {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'Rubik', system-ui, sans-serif;
   line-height: 1.4;
+  font-size: 17px;
   margin: 0;
   padding: 0;
+  background: #d9d9fb;
+}
+
+.visually-hidden {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
 }
 
 main {
-  max-width: 35rem;
+  max-width: 40rem;
   margin: 0 auto;
 }
 
-.PostTimeline > * + * {
-  border-top: 1px solid #cee;
+.AppHeading {
+  color: #224;
+  letter-spacing: -0.01em;
+  font-size: 2.5rem;
+  margin-bottom: 0;
+}
+
+.AppSubtitle {
+  margin-top: 0;
+  color: #335;
+}
+
+.LikeFetchError {
+  margin-top: 16px;
+}
+
+.form-field label {
+  display: block;
+  font-size: 15px;
+  opacity: 0.75;
+  margin-bottom: 4px;
+}
+
+.form-field input {
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 0 0 1px #c0c0e3;
+  font: inherit;
+  margin: 0;
+  padding: 14px 12px;
+  transition: 0.1s box-shadow;
+}
+
+.form-field input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #44d;
+}
+
+.SpinnerCard {
+  position: relative;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+  transition: ease 0.2s height, ease 0.2s opacity;
+}
+
+.SpinnerCard--visible {
+  opacity: 1;
+  height: calc(5rem + 16px);
+  pointer-events: auto;
+}
+
+.SpinnerCard__inner {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: white;
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: 8px;
+  outline: 1px solid #c0c0e3;
+  text-align: center;
+}
+
+.SpinnerCard .Spinner {
+  --size: 40px;
+  --thickness: 5px;
+}
+
+.Spinner {
+  --size: 20px;
+  --thickness: 3px;
+  position: relative;
+  display: inline-block;
+  width: var(--size);
+  height: var(--size);
+}
+
+.Spinner::before {
+  display: block;
+  position: absolute;
+  content: '';
+  top: 0;
+  left: 0;
+  width: var(--size);
+  height: var(--size);
+  border: var(--thickness) solid #c0c0e3;
+  border-radius: 100%;
+}
+
+.Spinner::after {
+  display: block;
+  position: absolute;
+  content: '';
+  top: 0;
+  left: 0;
+  width: var(--size);
+  height: var(--size);
+  border: var(--thickness) solid #44d;
+  border-radius: 100%;
+  clip-path: inset(0 50% 50% 0);
+  animation: spinner-spin 1s linear infinite;
+}
+
+@keyframes spinner-spin {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.PostTimeline {
+  background: white;
+  margin: 1rem 0;
+  padding: 0 16px;
+  border-radius: 8px;
+  outline: 1px solid #c0c0e3;
+  transition: ease 0.2s opacity;
+}
+
+.PostTimeline--loading {
+  opacity: 0.5;
+}
+
+.PostSpinner {
+  text-align: center;
+  padding: 16px 0;
+}
+
+.PostSpinner .Spinner {
+  --size: 40px;
+  --thickness: 5px;
+}
+
+.PostThread > .Post > .Post__avatar {
+  z-index: 2;
+}
+
+.PostThread > .Post:not(:last-child)::before {
+  position: absolute;
+  display: block;
+  content: '';
+  top: 16px;
+  left: 21px;
+  width: 2px;
+  height: 100%;
+  background: #ccd;
+  z-index: 1;
 }
 
 .Post {
-  padding: 12px 8px 12px 54px;
-}
-
-.Post > * + * {
-  margin-top: 4px;
+  position: relative;
+  display: grid;
+  grid-template-areas:
+    'sidebar author-name   author-handle relative-date'
+    'sidebar content       content       content'
+    'sidebar profile-error profile-error profile-error'
+    'sidebar image         image           image'
+    'sidebar images        images          images'
+    'sidebar post-embed    post-embed      post-embed'
+    'sidebar embed         embed           embed';
+  grid-template-columns: min-content minmax(0, max-content) 1fr min-content;
+  padding: 12px 0;
 }
 
 .Post__avatar,
 .Post__avatar-placeholder {
-  float: left;
-  margin-left: -54px;
+  grid-area: sidebar;
   width: 44px;
   height: 44px;
+  margin-right: 12px;
   border-radius: 100%;
+  box-shadow: 0 0 0 2px white;
 }
 
 .Post__avatar-placeholder {
   background: #dddde8;
 }
 
-.Post__profile {
-  margin: 0;
-  font-size: inherit;
-  font-weight: normal;
+.Post__author-name {
+  grid-area: author-name;
+  margin-right: 4px;
+  color: inherit;
+  font-weight: bold;
+  text-decoration: none;
 }
 
-.Post__profile__handle {
+.Post__author-name:hover {
+  text-decoration: underline;
+}
+
+.Post__author-handle {
+  grid-area: author-handle;
   opacity: 0.5;
   font-size: 15px;
 }
 
-.FriendlyError {
-  background: #f0dddd;
-  padding: 8px 12px;
-  border: 1px solid #d99;
-  border-radius: 8px;
+.Post__relative-date {
+  grid-area: relative-date;
+  opacity: 0.5;
+  font-size: 15px;
+  color: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.Post__relative-date:hover {
+  text-decoration: underline;
+}
+
+.Post__author-name,
+.Post__author-handle,
+.Post__relative-date {
+  align-self: center;
+}
+
+.Post__content {
+  grid-area: content;
 }
 
 .Post__content a {
@@ -66,4 +264,95 @@ main {
 
 .Post__content a:hover {
   text-decoration: underline;
+}
+
+.Post__profile-error {
+  grid-area: profile-error;
+  margin-top: 8px;
+}
+
+.Post__image {
+  grid-area: image;
+  margin-top: 8px;
+  width: 100%;
+  height: auto;
+  max-height: 60vh;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.Post__images {
+  grid-area: images;
+  margin-top: 8px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(calc(100% / 2.2), 1fr));
+  grid-template-rows: repeat(auto-fit, minmax(calc(100% / 2.2), 1fr));
+  gap: 4px;
+  height: 60vh;
+  min-height: 400px;
+  overflow: hidden;
+  border-radius: 8px;
+}
+
+.Post__images img {
+  width: 0;
+  height: 0;
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: cover;
+}
+
+.Post__avatar,
+.Post__image,
+.Post__images img {
+  outline: 1px solid #0082;
+  outline-offset: -1px;
+}
+
+.Post__post-embed {
+  grid-area: post-embed;
+  margin-top: 8px;
+}
+
+.Post__link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  font-size: 0;
+}
+
+.Post--embed {
+  grid-template-areas:
+    'sidebar author-name   author-handle relative-date'
+    'content content       content       content'
+    'profile-error profile-error profile-error profile-error'
+    'image image         image           image'
+    'images images        images          images'
+    'post-embed post-embed    post-embed      post-embed'
+    'embed embed         embed           embed';
+  grid-template-columns: min-content minmax(0, max-content) 1fr min-content;
+  padding: 8px 12px;
+  border: 1px solid #ddddde;
+  border-radius: 8px;
+}
+
+.Post--embed > .Post__content {
+  margin-top: 4px;
+  line-height: 1.2;
+}
+
+.Post--embed > .Post__avatar,
+.Post--embed > .Post__avatar-placeholder {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+}
+
+.FriendlyError {
+  background: #f0dddd;
+  padding: 8px 12px;
+  border: 1px solid #d99;
+  border-radius: 8px;
 }
