@@ -17,7 +17,7 @@ function App() {
   const load = (cursor?: string) => {
     setError(null)
 
-    return fetchLikedPosts({ handle: profileHandle, cursor })
+    return fetchLikedPosts({ handle: profileHandle.replace(/^@/, ''), cursor })
       .then(({ likes: newLikes, cursor: newCursor }) => {
         if (cursor) {
           setLikes([...likes, ...newLikes])
