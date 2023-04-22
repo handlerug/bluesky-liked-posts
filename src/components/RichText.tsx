@@ -1,5 +1,5 @@
-import { memo } from 'react'
-import { RichText as RichTextParser } from '@atproto/api'
+import { ReactNode, memo } from 'react'
+import { AppBskyRichtextFacet, RichText as RichTextParser } from '@atproto/api'
 import { WEB_APP } from '../utils/constants'
 
 const RichText = memo(

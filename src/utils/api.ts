@@ -1,4 +1,5 @@
-import AtpAgent, {
+import {
+  AtpAgent,
   AppBskyActorProfile,
   AppBskyFeedLike,
   AppBskyFeedPost,
