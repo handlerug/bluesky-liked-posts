@@ -13,6 +13,7 @@ import FriendlyError from './FriendlyError'
 import { fetchPost, fetchProfile, getBlobURL } from '../utils/api'
 import { getRelativeDateString } from '../utils/datetime'
 import './Post.css'
+import { WEB_APP } from '../utils/constants'
 
 function PostImages({
   did,
@@ -184,9 +185,7 @@ function Post({
       )}
       <a
         className="Post__author-name"
-        href={`https://staging.bsky.app/profile/${
-          profile ? profile.handle : atUri.hostname
-        }`}
+        href={`${WEB_APP}/profile/${profile ? profile.handle : atUri.hostname}`}
       >
         {profile?.profile.displayName ?? profile?.handle ?? atUri.hostname}
       </a>{' '}
@@ -195,7 +194,7 @@ function Post({
       ) : null}
       <a
         className="Post__relative-date"
-        href={`https://staging.bsky.app/profile/${atUri.hostname}/post/${atUri.rkey}`}
+        href={`${WEB_APP}/profile/${atUri.hostname}/post/${atUri.rkey}`}
       >
         <time
           dateTime={date.toISOString()}
@@ -247,7 +246,7 @@ function Post({
       {isEmbedded && (
         <a
           className="Post__link"
-          href={`https://staging.bsky.app/profile/${atUri.hostname}/post/${atUri.rkey}`}
+          href={`${WEB_APP}/profile/${atUri.hostname}/post/${atUri.rkey}`}
         >
           Open post in the Bluesky web app
         </a>
