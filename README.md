@@ -1,4 +1,4 @@
-# Show my likes! ❤️
+# Show my likes! ❤️ for Bluesky
 
 A web app that shows liked posts of a profile.
 
