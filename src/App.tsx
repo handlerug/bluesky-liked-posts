@@ -1,10 +1,11 @@
-import classNames from 'classnames'
 import { FormEvent, useEffect, useState } from 'react'
-import './App.css'
-import FriendlyError from './components/FriendlyError'
+import classNames from 'classnames'
 import Post from './components/Post'
-import { Like, fetchLikedPosts } from './utils/api'
+import FriendlyError from './components/FriendlyError'
 import Spinner from './components/Spinner'
+import { Like, fetchLikedPosts } from './utils/api'
+import { WEB_APP } from './utils/constants'
+import './App.css'
 
 function App() {
   const [isLoading, setIsLoading] = useState(false)
@@ -64,75 +65,91 @@ function App() {
   }, [cursor])
 
   return (
-    <main>
-      <h1 className="App__heading">Show my likes! ❤️</h1>
+    <>
+      <header className="App__header">
+        <h1 className="App__heading">Show my likes! ❤️</h1>
 
-      <p className="App__subtitle">
-        Enter your profile handle and get a list of posts you have liked
-      </p>
+        <p className="App__subtitle">
+          Enter your handle and get a list of the profile's liked posts
+        </p>
 
-      <form onSubmit={onSubmit}>
-        <div className="form-field">
-          <label htmlFor="profile-handle">Your profile handle</label>
-          <input
-            id="profile-handle"
-            type="text"
-            name="handle"
-            placeholder="jesopo.bsky.social"
-            value={profileHandle}
-            onChange={(ev) => setProfileHandle(ev.target.value)}
-          />
-        </div>
-      </form>
+        <p className="App__credits">
+          made by <a href={`${WEB_APP}/profile/handlerug.me`}>@handlerug.me</a>
+          {' • '}
+          <a href="https://github.com/handlerug/bluesky-liked-posts">
+            source code
+          </a>
+        </p>
+      </header>
 
-      <div
-        className={classNames(
-          'App__loading-card',
-          isLoading && 'App__loading-card--visible'
-        )}
-        aria-hidden={!isLoading}
-      >
-        <div className="App__loading-card__inner">
-          <Spinner />
-          Loading your likes…
-        </div>
-      </div>
+      <main>
+        <form onSubmit={onSubmit}>
+          <div className="form-field">
+            <label htmlFor="profile-handle">Your profile handle</label>
+            <input
+              id="profile-handle"
+              type="text"
+              name="handle"
+              placeholder="jesopo.bsky.social"
+              value={profileHandle}
+              onChange={(ev) => setProfileHandle(ev.target.value)}
+            />
+          </div>
 
-      {error ? (
-        <FriendlyError
-          className="App__like-error"
-          heading="Error fetching likes"
-          message={error}
-        />
-      ) : likes.length > 0 ? (
+          <div className="form-field">
+            <button type="submit">Load likes!</button>
+          </div>
+        </form>
+
         <div
           className={classNames(
-            'App__post-timeline',
-            isLoading && 'App__post-timeline--loading'
+            'App__loading-card',
+            isLoading && 'App__loading-card--visible'
           )}
+          aria-hidden={!isLoading}
         >
-          {likes.map((like) =>
-            'value' in like ? (
-              <Post key={like.uri} uri={like.uri} post={like.value} />
-            ) : (
-              <FriendlyError
-                key={like.uri}
-                heading="Error fetching the post"
-                message={like.error}
-              />
-            )
-          )}
-          {cursor ? (
-            <div
-              className="App__post-loading-card"
-              aria-label="Loading more posts"
-            >
-              <Spinner />
-            </div>
-          ) : null}
+          <div className="App__loading-card__inner">
+            <Spinner />
+            Loading your likes…
+          </div>
         </div>
-      ) : null}
-    </main>
+
+        {error ? (
+          <FriendlyError
+            className="App__like-error"
+            heading="Error fetching likes"
+            message={error}
+          />
+        ) : likes.length > 0 ? (
+          <div
+            className={classNames(
+              'App__post-timeline',
+              isLoading && 'App__post-timeline--loading'
+            )}
+          >
+            {likes.map((like) =>
+              'value' in like ? (
+                <Post key={like.uri} uri={like.uri} post={like.value} />
+              ) : (
+                <FriendlyError
+                  key={like.uri}
+                  heading="Error fetching the post"
+                  message={like.error}
+                />
+              )
+            )}
+            {cursor ? (
+              <div
+                className="App__post-loading-card"
+                aria-label="Loading more posts"
+              >
+                <Spinner />
+              </div>
+            ) : null}
+          </div>
+        ) : null}
+      </main>
+    </>
   )
 }
 

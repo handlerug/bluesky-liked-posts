@@ -7,11 +7,18 @@
 body {
   font-family: 'Rubik', system-ui, sans-serif;
   line-height: 1.4;
-  font-size: 17px;
-  margin: 0;
+  font-size: 15px;
+  max-width: 40rem;
+  margin: 0 auto;
   padding: 16px;
   background: #d9d9fb;
   color: #112;
+}
+
+@media (min-width: 600px) {
+  body {
+    font-size: 17px;
+  }
 }
 
 .visually-hidden {
@@ -24,9 +31,8 @@ body {
   width: 1px;
 }
 
-main {
-  max-width: 40rem;
-  margin: 0 auto;
+.form-field + .form-field {
+  margin-top: 8px;
 }
 
 .form-field label {
@@ -50,4 +56,45 @@ main {
 .form-field input:focus {
   outline: none;
   box-shadow: 0 0 0 2px #44d;
+}
+
+.form-field button {
+  position: relative;
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+  font: inherit;
+  font-weight: bold;
+  background-image: linear-gradient(to bottom, #75e, #42c);
+  color: white;
+  margin: 0;
+  padding: 14px 12px;
+  transition: ease 0.1s box-shadow;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.form-field button::before {
+  display: block;
+  position: absolute;
+  content: '';
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transition: ease 0.1s background-color;
+  pointer-events: none;
+}
+
+.form-field button:hover::before {
+  background-color: #fff2;
+}
+
+.form-field button:active::before {
+  background-color: #0002;
+}
+
+.form-field button:focus {
+  outline: none;
+  box-shadow: 0 0 0 1px white, 0 0 0 3px #44d;
 }

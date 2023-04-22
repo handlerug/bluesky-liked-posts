@@ -44,6 +44,8 @@
   grid-area: author-handle;
   opacity: 0.5;
   font-size: 15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .Post__relative-date {
