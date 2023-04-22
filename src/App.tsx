@@ -66,10 +66,7 @@ async function loadLikes({
             cid: post.cid,
           })
           .then(({ data: { uri, value } }) => {
-            if (
-              AppBskyFeedPost.isRecord(value) &&
-              AppBskyFeedPost.validateRecord(value).success
-            ) {
+            if (AppBskyFeedPost.isRecord(value)) {
               return { uri, value }
             }
             return { uri: uri, error: `Invalid post record ${uri}` }
@@ -136,10 +133,7 @@ async function fetchPost(uri: string, cid?: string) {
     rkey: atUri.rkey,
     cid: cid,
   })
-  if (
-    AppBskyFeedPost.isRecord(value) &&
-    AppBskyFeedPost.validateRecord(value).success
-  ) {
+  if (AppBskyFeedPost.isRecord(value)) {
     return value
   }
   throw new Error(`Invalid post record ${uri}`)
