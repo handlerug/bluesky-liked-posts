@@ -9,7 +9,7 @@ import './App.css'
 
 function App() {
   const [isLoading, setIsLoading] = useState(false)
-  const [profileHandle, setProfileHandle] = useState('jesopo.bsky.social')
+  const [profileHandle, setProfileHandle] = useState('')
   const [error, setError] = useState(null)
   const [likes, setLikes] = useState<Like[]>([])
   const [cursor, setCursor] = useState<string | undefined>(undefined)
