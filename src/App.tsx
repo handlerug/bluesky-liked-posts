@@ -10,6 +10,8 @@ import './App.css'
 function App() {
   const [isLoading, setIsLoading] = useState(false)
   const [profileHandle, setProfileHandle] = useState('')
+  const [showAdvancedSettings, setShowAdvancedSettings] = useState(false)
+  const [service, setService] = useState('https://bsky.social')
   const [error, setError] = useState(null)
   const [likes, setLikes] = useState<Like[]>([])
   const [cursor, setCursor] = useState<string | undefined>(undefined)
@@ -18,6 +20,7 @@ function App() {
     setError(null)
 
     return fetchLikedPosts({
+      service,
       handle: profileHandle.toLowerCase().replace(/^@/, ''),
       cursor,
     })
@@ -99,6 +102,31 @@ function App() {
             />
           </div>
 
+          <div className="advanced-settings">
+            <button
+              type="button"
+              onClick={() => setShowAdvancedSettings(!showAdvancedSettings)}
+            >
+              Advanced Settings
+            </button>
+            {showAdvancedSettings && (
+              <div className="advanced-settings-content">
+                <div className="form-field">
+                  <label htmlFor="service-url">
+                    Custom Atproto Service URL
+                  </label>
+                  <input
+                    id="service-url"
+                    type="text"
+                    name="service"
+                    placeholder="https://bsky.social"
+                    value={service}
+                    onChange={(ev) => setService(ev.target.value)}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
           <div className="form-field">
             <button type="submit">Load likes!</button>
           </div>
@@ -132,7 +160,12 @@ function App() {
           >
             {likes.map((like) =>
               'value' in like ? (
-                <Post key={like.uri} uri={like.uri} post={like.value} />
+                <Post
+                  key={like.uri}
+                  uri={like.uri}
+                  post={like.value}
+                  service={service}
+                />
               ) : (
                 <FriendlyError
                   key={like.uri}

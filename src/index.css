@@ -48,7 +48,7 @@ body {
   border-radius: 8px;
   box-shadow: 0 0 0 1px #c0c0e3;
   font: inherit;
-  margin: 0;
+  margin: 0 0 16px;
   padding: 14px 12px;
   transition: 0.1s box-shadow;
 }
@@ -97,4 +97,23 @@ body {
 .form-field button:focus {
   outline: none;
   box-shadow: 0 0 0 1px white, 0 0 0 3px #44d;
+}
+
+.advanced-settings button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: 8px;
+  font: inherit;
+  font-weight: bold;
+  background-image: linear-gradient(to bottom, #75e, #42c);
+  color: white;
+  margin: 0 0 16px;
+  padding: 14px 12px;
+  transition: ease 0.1s box-shadow;
+  cursor: pointer;
+  overflow: hidden;
 }
