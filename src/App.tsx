@@ -104,13 +104,13 @@ function App() {
 
           <div className="advanced-settings">
             {showAdvancedSettings ? (
-              <a onClick={() => setShowAdvancedSettings(false)}>
+              <button type="button" onClick={() => setShowAdvancedSettings(false)}>
                 Hide advanced settings
-              </a>
+              </button>
             ) : (
-              <a onClick={() => setShowAdvancedSettings(true)}>
+              <button type="button" onClick={() => setShowAdvancedSettings(true)}>
                 Show advanced settings
-              </a>
+              </button>
             )}
             {showAdvancedSettings && (
               <div className="advanced-settings-content">

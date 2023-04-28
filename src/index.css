@@ -99,6 +99,14 @@ body {
   box-shadow: 0 0 0 1px white, 0 0 0 3px #44d;
 }
 
-.advanced-settings a {
+.advanced-settings button {
+  display: block;
+  background: none;
+  border: none;
+  padding: 0;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 15px;
+  margin-bottom: 4px;
   cursor: pointer;
 }
