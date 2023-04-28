@@ -103,17 +103,20 @@ function App() {
           </div>
 
           <div className="advanced-settings">
-            <button
-              type="button"
-              onClick={() => setShowAdvancedSettings(!showAdvancedSettings)}
-            >
-              Advanced Settings
-            </button>
+            {showAdvancedSettings ? (
+              <a onClick={() => setShowAdvancedSettings(false)}>
+                Hide advanced settings
+              </a>
+            ) : (
+              <a onClick={() => setShowAdvancedSettings(true)}>
+                Show advanced settings
+              </a>
+            )}
             {showAdvancedSettings && (
               <div className="advanced-settings-content">
                 <div className="form-field">
                   <label htmlFor="service-url">
-                    Custom Atproto Service URL
+                    Custom Atproto service URL
                   </label>
                   <input
                     id="service-url"
