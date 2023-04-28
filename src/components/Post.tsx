@@ -219,7 +219,7 @@ function Post({
             {AppBskyEmbedImages.isMain(post.embed.media) ? (
               <PostImages
                   did={atUri.hostname}
-                  images={post.embed.media.images} service={''}              />
+                  images={post.embed.media.images} service={service}              />
             ) : null}
           </>
         ) : null
@@ -229,7 +229,7 @@ function Post({
           className="Post__post-embed"
           uri={embeddedPost.uri}
           post={embeddedPost.record}
-          isEmbedded service={''}        />
+          isEmbedded service={service}        />
       ) : null}
       {profileError ? (
         <FriendlyError
@@ -264,7 +264,7 @@ function Post({
           post={{
             ...parentPost,
             reply: undefined,
-          }} service={''}        />
+          }} service={service}        />
         {postNode}
       </div>
     )
