@@ -104,11 +104,17 @@ function App() {
 
           <div className="advanced-settings">
             {showAdvancedSettings ? (
-              <button type="button" onClick={() => setShowAdvancedSettings(false)}>
+              <button
+                type="button"
+                onClick={() => setShowAdvancedSettings(false)}
+              >
                 Hide advanced settings
               </button>
             ) : (
-              <button type="button" onClick={() => setShowAdvancedSettings(true)}>
+              <button
+                type="button"
+                onClick={() => setShowAdvancedSettings(true)}
+              >
                 Show advanced settings
               </button>
             )}
