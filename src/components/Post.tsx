@@ -37,13 +37,18 @@ function PostImages({
   return (
     <div className="Post__images">
       {images.map((image, idx) => (
-        <img key={idx} src={getBlobURL(service, did, image.image)} alt={image.alt} />
+        <img
+          key={idx}
+          src={getBlobURL(service, did, image.image)}
+          alt={image.alt}
+        />
       ))}
     </div>
   )
 }
 
-function Post({service,
+function Post({
+  service,
   className,
   uri,
   post,
@@ -212,13 +217,19 @@ function Post({service,
       </div>
       {post.embed ? (
         AppBskyEmbedImages.isMain(post.embed) ? (
-          <PostImages service={service}  did={atUri.hostname} images={post.embed.images}/>
+          <PostImages
+            service={service}
+            did={atUri.hostname}
+            images={post.embed.images}
+          />
         ) : AppBskyEmbedRecordWithMedia.isMain(post.embed) ? (
           <>
             {AppBskyEmbedImages.isMain(post.embed.media) ? (
               <PostImages
-                  did={atUri.hostname}
-                  images={post.embed.media.images} service={service}              />
+                did={atUri.hostname}
+                images={post.embed.media.images}
+                service={service}
+              />
             ) : null}
           </>
         ) : null
@@ -229,7 +240,8 @@ function Post({service,
           className="Post__post-embed"
           uri={embeddedPost.uri}
           post={embeddedPost.record}
-          isEmbedded        />
+          isEmbedded
+        />
       ) : null}
       {profileError ? (
         <FriendlyError
@@ -260,12 +272,13 @@ function Post({service,
     return (
       <div className="PostThread">
         <Post
-         service={service}
+          service={service}
           uri={post.reply.parent.uri}
           post={{
             ...parentPost,
             reply: undefined,
-          }}        />
+          }}
+        />
         {postNode}
       </div>
     )

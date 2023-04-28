@@ -76,7 +76,8 @@ export async function fetchLikedPosts({
   }
 }
 
-export const fetchProfile = memoize(async function fetchProfile(service: string,
+export const fetchProfile = memoize(async function fetchProfile(
+  service: string,
   handle: string
 ) {
   const agent = new AtpAgent({ service })
