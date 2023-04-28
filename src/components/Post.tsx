@@ -16,19 +16,19 @@ import './Post.css'
 import { WEB_APP } from '../utils/constants'
 
 function PostImages({
+  service,
   did,
   images,
-  service
 }: {
+  service: string
   did: string
   images: AppBskyEmbedImages.Image[]
-  service: string
 }) {
   if (images.length === 1) {
     return (
       <img
         className="Post__image"
-        src={getBlobURL(did, images[0].image, service)}
+        src={getBlobURL(service, did, images[0].image)}
         alt={images[0].alt}
       />
     )
@@ -37,24 +37,23 @@ function PostImages({
   return (
     <div className="Post__images">
       {images.map((image, idx) => (
-        <img key={idx} src={getBlobURL(did, image.image, service)} alt={image.alt} />
+        <img key={idx} src={getBlobURL(service, did, image.image)} alt={image.alt} />
       ))}
     </div>
   )
 }
 
-function Post({
+function Post({service,
   className,
   uri,
   post,
   isEmbedded = false,
-  service
 }: {
+  service: string
   className?: string
   uri: string
   post: AppBskyFeedPost.Record
   isEmbedded?: boolean
-  service: string
 }) {
   const atUri = useMemo(() => new AtUri(uri), [uri])
 
@@ -88,7 +87,7 @@ function Post({
       return null
     }
 
-    return getBlobURL(atUri.hostname, profile.profile.avatar, service)
+    return getBlobURL(service, atUri.hostname, profile.profile.avatar)
   }, [profile])
 
   const [date, relativeDate] = useMemo(() => {
@@ -103,7 +102,7 @@ function Post({
 
     const abortController = new AbortController()
 
-    fetchPost(post.reply.parent.uri, service, post.reply.parent.cid)
+    fetchPost(service, post.reply.parent.uri, post.reply.parent.cid)
       .then((result) => {
         if (abortController.signal.aborted) {
           return
@@ -123,7 +122,7 @@ function Post({
   useEffect(() => {
     const abortController = new AbortController()
 
-    fetchProfile(atUri.hostname, service)
+    fetchProfile(service, atUri.hostname)
       .then((result) => {
         if (abortController.signal.aborted) {
           return
@@ -157,7 +156,7 @@ function Post({
 
     const abortController = new AbortController()
 
-    fetchPost(record.uri, service, record.cid)
+    fetchPost(service, record.uri, record.cid)
       .then((data) => {
         if (abortController.signal.aborted) {
           return
@@ -213,7 +212,7 @@ function Post({
       </div>
       {post.embed ? (
         AppBskyEmbedImages.isMain(post.embed) ? (
-          <PostImages did={atUri.hostname} images={post.embed.images} service={service} />
+          <PostImages service={service}  did={atUri.hostname} images={post.embed.images}/>
         ) : AppBskyEmbedRecordWithMedia.isMain(post.embed) ? (
           <>
             {AppBskyEmbedImages.isMain(post.embed.media) ? (
@@ -226,10 +225,11 @@ function Post({
       ) : null}
       {embeddedPost ? (
         <Post
+          service={service}
           className="Post__post-embed"
           uri={embeddedPost.uri}
           post={embeddedPost.record}
-          isEmbedded service={service}        />
+          isEmbedded        />
       ) : null}
       {profileError ? (
         <FriendlyError
@@ -260,11 +260,12 @@ function Post({
     return (
       <div className="PostThread">
         <Post
+         service={service}
           uri={post.reply.parent.uri}
           post={{
             ...parentPost,
             reply: undefined,
-          }} service={service}        />
+          }}        />
         {postNode}
       </div>
     )
