@@ -32,7 +32,7 @@ body {
 }
 
 .form-field + .form-field {
-  margin-top: 8px;
+  margin-top: 16px;
 }
 
 .form-field label {

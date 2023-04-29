@@ -4,12 +4,13 @@ import Post from './components/Post'
 import FriendlyError from './components/FriendlyError'
 import Spinner from './components/Spinner'
 import { Like, fetchLikedPosts } from './utils/api'
-import { WEB_APP } from './utils/constants'
+import { DEFAULT_SERVICE, WEB_APP } from './utils/constants'
 import './App.css'
 
 function App() {
   const [isLoading, setIsLoading] = useState(false)
   const [profileHandle, setProfileHandle] = useState('')
+  const [service, setService] = useState(DEFAULT_SERVICE)
   const [error, setError] = useState(null)
   const [likes, setLikes] = useState<Like[]>([])
   const [cursor, setCursor] = useState<string | undefined>(undefined)
@@ -18,6 +19,7 @@ function App() {
     setError(null)
 
     return fetchLikedPosts({
+      service,
       handle: profileHandle.toLowerCase().replace(/^@/, ''),
       cursor,
     })
@@ -100,6 +102,22 @@ function App() {
           </div>
 
           <div className="form-field">
+            <details>
+              <summary>Advanced settings</summary>
+
+              <label htmlFor="service-url">ATProto service URL</label>
+              <input
+                id="service-url"
+                type="text"
+                name="service"
+                placeholder={DEFAULT_SERVICE}
+                value={service}
+                onChange={(ev) => setService(ev.target.value)}
+              />
+            </details>
+          </div>
+
+          <div className="form-field">
             <button type="submit">Load likes!</button>
           </div>
         </form>
@@ -132,7 +150,12 @@ function App() {
           >
             {likes.map((like) =>
               'value' in like ? (
-                <Post key={like.uri} uri={like.uri} post={like.value} />
+                <Post
+                  key={like.uri}
+                  uri={like.uri}
+                  post={like.value}
+                  service={service}
+                />
               ) : (
                 <FriendlyError
                   key={like.uri}

@@ -19,10 +19,7 @@ export type Like = {
     }
 )
 
-const service = `https://bsky.social`
-const agent = new AtpAgent({ service })
-
-export function getBlobURL(did: string, ref: BlobRef) {
+export function getBlobURL(service: string, did: string, ref: BlobRef) {
   return `${service}/xrpc/com.atproto.sync.getBlob?${new URLSearchParams({
     did,
     cid: ref.ref,
@@ -30,15 +27,18 @@ export function getBlobURL(did: string, ref: BlobRef) {
 }
 
 export async function fetchLikedPosts({
+  service,
   handle,
   cursor,
 }: {
+  service: string
   handle: string
   cursor?: string
 }): Promise<{
   likes: Like[]
   cursor?: string
 }> {
+  const agent = new AtpAgent({ service })
   const { data } = await agent.api.com.atproto.repo.listRecords({
     repo: handle,
     collection: 'app.bsky.feed.like',
@@ -77,8 +77,10 @@ export async function fetchLikedPosts({
 }
 
 export const fetchProfile = memoize(async function fetchProfile(
+  service: string,
   handle: string
 ) {
+  const agent = new AtpAgent({ service })
   const { uri, value: profile } = await agent.api.com.atproto.repo
     .getRecord({
       repo: handle,
@@ -106,7 +108,8 @@ export const fetchProfile = memoize(async function fetchProfile(
   return { uri, handle, profile }
 })
 
-export async function fetchPost(uri: string, cid?: string) {
+export async function fetchPost(service: string, uri: string, cid?: string) {
+  const agent = new AtpAgent({ service })
   const atUri = new AtUri(uri)
 
   const {
