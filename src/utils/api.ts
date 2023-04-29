@@ -111,6 +111,7 @@ export const fetchProfile = memoize(async function fetchProfile(
 export async function fetchPost(service: string, uri: string, cid?: string) {
   const agent = new AtpAgent({ service })
   const atUri = new AtUri(uri)
+
   const {
     data: { value },
   } = await agent.api.com.atproto.repo.getRecord({
