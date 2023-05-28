@@ -53,6 +53,7 @@ function App() {
     }
 
     let fetchingMore = false
+
     function onScroll() {
       if (!fetchingMore && document.body.scrollHeight - window.scrollY < 2000) {
         fetchingMore = true
@@ -60,6 +61,7 @@ function App() {
         // The cursor will change and the effect will run again
       }
     }
+
     onScroll()
 
     window.addEventListener('scroll', onScroll, { passive: true })
@@ -79,7 +81,10 @@ function App() {
         </p>
 
         <p className="App__credits">
-          made by <a href={`${WEB_APP}/profile/handlerug.me`}>@handlerug.me</a>
+          made by{' '}
+          <a href={`${WEB_APP}/profile/did:plc:uowmeg4dqtanpmjuknadqjqc`}>
+            @handlerug.bsky.social
+          </a>
           {' • '}
           <a href="https://github.com/handlerug/bluesky-liked-posts">
             source code
